@@ -27,7 +27,7 @@ var sassSrc = 'source/sass/**/*.sass',
 
     // * images
     imgSrc = 'source/img/*',
-    imgDest = 'build/assests/img',
+    imgDest = 'build/assets/img',
 
     // * javascript stuff
     vendorSrc = 'source/js/vendors/',
@@ -108,11 +108,11 @@ gulp.task('watch', function () {
         browser: 'firefox'
     });
 
-    gulp.watch([pugIncSrc, pugSrc], ['pug']);
-    gulp.watch(htmlSrc, ['html']);
-    gulp.watch(sassSrc, ['sass']);
-    gulp.watch(scriptSrc, ['scripts']);
-    gulp.watch(vendorSrc, ['vendors']);
+    gulp.watch([pugIncSrc, pugSrc],gulp.parallel(['pug']));
+    gulp.watch(htmlSrc,gulp.parallel(['html']));
+    gulp.watch(sassSrc,gulp.parallel(['sass']));
+    gulp.watch(scriptSrc,gulp.parallel(['scripts']));
+    gulp.watch(vendorSrc,gulp.parallel(['vendors']));
     gulp
         .watch([
             'build/*.html',
@@ -124,4 +124,4 @@ gulp.task('watch', function () {
 });
 
 // use default task to launch Browsersync and watch JS files
-gulp.task('default', ['sass', 'scripts', 'vendors', 'watch', 'pug', 'html'], function () {});
+gulp.task('default',gulp.series(gulp.parallel('sass', 'scripts', 'vendors', 'watch', 'pug', 'html'), function () {}));
