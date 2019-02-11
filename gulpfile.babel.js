@@ -1,16 +1,16 @@
 // ! Dependencies
 
-const gulp = require('gulp'),
-    autoprefixer = require('gulp-autoprefixer'),
-    browserSync = require('browser-sync').create(),
-    concat = require('gulp-concat'),
-    images = require('gulp-imagemin'),
-    plumber = require('gulp-plumber'),
-    pug = require('gulp-pug'),
-    rename = require('gulp-rename'),
-    sass = require('gulp-sass'),
-    sourcemaps = require('gulp-sourcemaps'),
-    uglify = require('gulp-uglify')
+import gulp from "gulp";
+import autoprefixer from "gulp-autoprefixer";
+import concat from "gulp-concat";
+import images from "gulp-imagemin";
+import plumber from "gulp-plumber";
+import pug from "gulp-pug";
+import rename from "gulp-rename";
+import sass from "gulp-sass";
+import sourcemaps from "gulp-sourcemaps";
+import uglify from "gulp-uglify";
+import browserSync from "browser-sync";
 
 // ? Paths
 
@@ -51,7 +51,7 @@ gulp.task('html', function () {
 });
 
 // Compiles all SASS files
-gulp.task('sass', function () {
+gulp.task('sass', function (done) {
     gulp.src(sassSrc) // ! change to scss if you're using that
         .pipe(plumber())
         // ! for knowing what sass partial it is from in the inspect on browser
@@ -69,36 +69,44 @@ gulp.task('sass', function () {
         }))
 
         .pipe(sourcemaps.write())
+        .pipe(browserSync.stream())
         .pipe(gulp.dest(styleDest));
+
+    done();
 });
 
 // Optimises the images
-gulp.task('images', function () {
+gulp.task('images', function (done) {
     gulp.src(imgSrc)
         .pipe(images())
         .pipe(gulp.dest(imgDest));
+
+    done();
 });
 
 // Uglify js files
-gulp.task('scripts', function () {
+gulp.task('scripts', function (done) {
     gulp.src(scriptSrc)
         .pipe(plumber())
         .pipe(uglify())
         .pipe(gulp.dest(scriptDest));
+
+    done();
 });
 
 //Concat and Compress Vendor .js files
-gulp.task('vendors', function () {
+gulp.task('vendors', function (done) {
     gulp.src(vendorSrc)
         .pipe(plumber())
         .pipe(concat('vendors.js'))
         .pipe(uglify())
         .pipe(gulp.dest(vendorDest));
+
+    done();
 });
 
-
 // Watch for changes
-gulp.task('watch', function () {
+gulp.task('watch' ,function(done) {
     // Serve files from the root of this project
     browserSync.init({
         server: {
@@ -121,7 +129,9 @@ gulp.task('watch', function () {
             'build/assets/js/vendors/*.js'
         ])
         .on('change', browserSync.reload);
+
+    done();
 });
 
 // use default task to launch Browsersync and watch JS files
-gulp.task('default',gulp.series(gulp.parallel('sass', 'scripts', 'vendors', 'watch', 'pug', 'html'), function () {}));
+gulp.task('default',gulp.parallel('sass', 'scripts', 'vendors', 'watch', 'pug', 'html'), function () {});
