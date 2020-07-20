@@ -7,7 +7,7 @@ import images from "gulp-imagemin";
 import plumber from "gulp-plumber";
 import pug from "gulp-pug";
 import rename from "gulp-rename";
-import sass from "gulp-sass";
+import sass from 'gulp-dart-sass';
 import sourcemaps from "gulp-sourcemaps";
 import uglify from "gulp-uglify";
 import browserSync from "browser-sync";
